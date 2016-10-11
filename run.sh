@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+# This file does lots of running around before launching httpd
+
 # Try to set servername
 if [ -n "${APACHE_SERVERNAME}" ]
   then
