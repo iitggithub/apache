@@ -1,0 +1,15 @@
+web-server:
+  image: iitgdocker/apache:5.6
+  ports:
+    - "8080:80"
+    - "4443:443"
+  volumes:
+    - /data/apache/conf.d:/etc/httpd/conf.d:ro
+    - /data/apache/html:/var/www/html:ro
+    - /data/apache/ssl:/etc/httpd/ssl:ro
+    - /data/apache/aide:/var/lib/aide:ro
+    - /data/apache/log:/var/log/httpd
+  #environment:
+  #  - APACHE_SERVERNAME=wingsof.chicken.com
+  #  - AIDE_SERVERNAME=wingsof.chicken.com
+  #  - AIDE_EMAIL=me@chicken.com
