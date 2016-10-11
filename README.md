@@ -8,9 +8,10 @@ The dockerfile is based on some hardening guides for php, apache and openssl.
 
 # Supported Magento versions
 
-Version | Git branch | Tag name
---------| ---------- |---------
-5.6     | master     | 5.6
+PHP Version | Git branch | Tag name
+------------| ---------- |---------
+5.6         | master     | latest
+5.6         | 5.6        | 5.6
 
 
 # Getting Started
