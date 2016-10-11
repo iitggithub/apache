@@ -37,15 +37,15 @@ web-server:
     - "80:80"
     - "443:443"
   volumes:
-    - /data/apache/conf.d:/etc/httpd/conf.d:ro
+    - /data/apache/conf.d:/etc/httpd/conf.d
     - /data/apache/html:/var/www/html:ro
     - /data/apache/ssl:/etc/httpd/ssl:ro
     - /data/apache/aide:/var/lib/aide:ro
     - /data/apache/log:/var/log/httpd
-  environment:
-    - #APACHE_SERVERNAME=wingsof.chicken.com
-    - #AIDE_SERVERNAME=wingsof.chicken.com
-    - #AIDE_EMAIL=me@chicken.com
+  #environment:
+    #- APACHE_SERVERNAME=wingsof.chicken.com
+    #- AIDE_SERVERNAME=wingsof.chicken.com
+    #- AIDE_EMAIL=me@chicken.com
 ```
 
 By running 'docker-compose up -d' from within the same directory as your docker-compose.yml, you'll be able to bring the container up.
@@ -67,7 +67,7 @@ run.sh will check for each of those files before modifying /etc/httpd/conf.d/ssl
 
 ## Apache Configuration Files /etc/httpd/conf.d
 
-Apache will look in /etc/httpd/conf.d for any files that end in .conf. By mounting a volume onto /etc/httpd/conf.d you can add your own application specific configuration files which will be loaded when the container starts. Using the default configuration above, these directories will be mounted read only (ro) meaning that they cannot be modified from within the container.
+Apache will look in /etc/httpd/conf.d for any files that end in .conf. By mounting a volume onto /etc/httpd/conf.d you can add your own application specific configuration files which will be loaded when the container starts.
 
 ## Apache Document Root /var/www/html
 
