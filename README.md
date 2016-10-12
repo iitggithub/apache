@@ -1,6 +1,6 @@
 # Apache/PHP Based Docker Container
 
-This image is a CentOS 7 based container which contains slightly more secure versions of Apache 2.4.6, openssl and PHP 5.6 w/ suhosin patch and AIDE (Advanced Intrusion Detection Environment) file and directory integrity checker.
+This image is a CentOS 7 based container which contains slightly more secure versions of Apache 2.4.6, openssl and PHP w/ suhosin patch and AIDE (Advanced Intrusion Detection Environment) file and directory integrity checker.
 
 # Notes
 
@@ -11,7 +11,11 @@ The dockerfile is based on some hardening guides for php, apache and openssl.
 PHP Version | Git branch | Tag name
 ------------| ---------- |---------
 5.6         | master     | latest
+7.1         | 7.1        | 7.1
+7.0         | 7.0        | 7.0
 5.6         | 5.6        | 5.6
+5.5         | 5.5        | 5.5
+5.4         | 5.4        | 5.4
 
 
 # Getting Started
@@ -23,7 +27,7 @@ There's two ways to get up and running, the easy way and the hard way.
 Fire up apache
 
 ```
-docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/conf.d:/data/conf.d:ro -v /data/apache/ssl:/etc/httpd/ssl:ro iitgdocker/apache:5.6
+docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/conf.d:/data/conf.d -v /data/apache/html:/var/www/html:ro -v /data/apache/ssl:/etc/httpd/ssl:ro -v /data/apache/aide:/var/lib/aide:ro -v /data/apache/log:/var/log/httpd iitgdocker/apache:latest
 ```
 
 ## The Easy Way (Docker Compose)
@@ -32,7 +36,7 @@ The github repo contains a docker-compose.yml you can use as a base. The docker-
 
 ```
 web-server:
-  image: iitgdocker/apache:5.6
+  image: iitgdocker/apache:latest
   ports:
     - "80:80"
     - "443:443"
