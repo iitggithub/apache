@@ -2,13 +2,14 @@ FROM centos:7.2.1511
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
-# Enables epel repo and remi repo w/ php 5.6 enabled.
+# Enables epel repo and remi repo w/ php enabled.
 COPY epel.repo /etc/yum.repos.d/epel.repo
 COPY remi.repo /etc/yum.repos.d/remi.repo
 
 RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
+                                mod_security \
                                 aide \
                                 mailx \
                                 php \
