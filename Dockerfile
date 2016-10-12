@@ -56,7 +56,7 @@ COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
 RUN /usr/sbin/aide --init -c /var/lib/aide/aide.conf && mv -f /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
-RUN echo "0 2 * * * root test -n \"${AIDE_EMAIL}\" && test -n \"${AIDE_SLEEP}\" && sleep ${AIDE_SLEEP} && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s [REPORT] AIDE Integrity Check on `hostname` ${AIDE_EMAIL}" >>/etc/crontab
-RUN echo "0 2 * * * root test -n \"${AIDE_EMAIL}\" && test -z \"${AIDE_SLEEP}\" && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s [REPORT] AIDE Integrity Check on `hostname` ${AIDE_EMAIL}" >>/etc/crontab
+RUN echo "0 2 * * * root test -n \"${AIDE_EMAIL}\" && test -n \"${AIDE_SLEEP}\" && sleep ${AIDE_SLEEP} && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s \"[REPORT] AIDE Integrity Check on `hostname`\" ${AIDE_EMAIL}" >>/etc/crontab
+RUN echo "0 2 * * * root test -n \"${AIDE_EMAIL}\" && test -z \"${AIDE_SLEEP}\" && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s \"[REPORT] AIDE Integrity Check on `hostname`\" ${AIDE_EMAIL}" >>/etc/crontab
 
 CMD ["/run.sh"]
