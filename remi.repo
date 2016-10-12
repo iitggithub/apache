@@ -10,11 +10,12 @@ enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
 
-[remi-php56]
-name=Remi's PHP 5.6 RPM repository for Enterprise Linux 7 - $basearch
-#baseurl=http://rpms.remirepo.net/enterprise/7/php56/$basearch/
-mirrorlist=http://rpms.remirepo.net/enterprise/7/php56/mirror
-# NOTICE: common dependencies are in "remi-safe"
+
+[remi-php55]
+name=Remi's PHP 5.5 RPM repository for Enterprise Linux 7 - $basearch
+#baseurl=http://rpms.remirepo.net/enterprise/7/php55/$basearch/
+mirrorlist=http://rpms.remirepo.net/enterprise/7/php55/mirror
+## NOTICE: common dependencies are in "remi-safe"
 enabled=1
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi
