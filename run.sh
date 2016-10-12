@@ -16,6 +16,21 @@ test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Conf
 test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
 
+if [ -f /var/lib/aide/aide.conf ]
+  then
+  # override the existing AIDE configuration file if exists
+  # in the database directory.
+  echo "Found /var/lib/aide/aide.conf. Overriding the default configuration with this."
+  ln -sf /var/lib/aide/aide.conf /etc/aide.conf
+  chmod 600 /var/lib/aide/aide.conf
+fi
+
+if [ ! -f /var/lib/aide/aide.db.gz ]
+  then
+  echo "Generating a new AIDE database in /var/lib/aide/aide.db.gz..."
+  /usr/sbin/aide --init && mv -vf /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
+fi
+
 # Apache gets grumpy about PID files pre-existing
 rm -vf /var/run/httpd/httpd.pid
 
