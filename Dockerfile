@@ -10,6 +10,7 @@ RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 aide \
+                                mailx \
                                 php \
                                 php-devel \
                                 php-suhosin && \
