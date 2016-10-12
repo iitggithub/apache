@@ -6,7 +6,7 @@ This image is a CentOS 7 based container which contains slightly more secure ver
 
 The dockerfile is based on some hardening guides for php, apache and openssl.
 
-# Supported Magento versions
+# Supported PHP versions
 
 PHP Version | Git branch | Tag name
 ------------| ---------- |---------
@@ -23,7 +23,7 @@ There's two ways to get up and running, the easy way and the hard way.
 Fire up apache
 
 ```
-docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/conf.d:/data/conf.d:ro -v /data/magento/ssl:/etc/httpd/ssl:ro iitgdocker/apache:5.6
+docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/conf.d:/data/conf.d:ro -v /data/apache/ssl:/etc/httpd/ssl:ro iitgdocker/apache:5.6
 ```
 
 ## The Easy Way (Docker Compose)
@@ -46,6 +46,7 @@ web-server:
     #- APACHE_SERVERNAME=wingsof.chicken.com
     #- AIDE_SERVERNAME=wingsof.chicken.com
     #- AIDE_EMAIL=me@chicken.com
+    #- AIDE_SLEEP=43200
 ```
 
 By running 'docker-compose up -d' from within the same directory as your docker-compose.yml, you'll be able to bring the container up.
@@ -99,5 +100,6 @@ Variable                 | Default Value (docker-compose) | Description
 APACHE_SERVERNAME        | unset                          | Sets the Apache server name.
 AIDE_SERVERNAME          | (containername)                | Sets the AIDE server name. Will use the container name if none specified.
 AIDE_EMAIL               | unset                          | AIDE check output will be emailed to this address. No email is sent if not specified.
+AIDE_SLEEP               | unset                          | Number of seconds to delay AIDE checking. If 2am GMT doesn't work for you enable this and delay the check.
 
 # The End
