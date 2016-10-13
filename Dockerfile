@@ -13,10 +13,9 @@ RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 mod_security \
+                                mod_security_crs \
                                 aide \
-                                mailx \
                                 php \
-                                php-devel \
                                 php-suhosin && \
                                 yum clean all
 
@@ -45,7 +44,7 @@ RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
            /etc/httpd/conf.d/ssl.conf
 
 # Include end user apache configuration files
-RUN echo -e "# Include custom apache configuration files\nIncludeOptional /data/conf.d/*.conf" >/etc/httpd/conf.d/custom.conf
+RUN echo -e '# Include custom apache configuration files\nIncludeOptional /data/conf.d/*.conf' >/etc/httpd/conf.d/custom.conf
 
 # Make sure /var/www/html knows who's boss.
 RUN chown -R apache:apache /var/www/html
@@ -55,15 +54,9 @@ VOLUME ["/etc/httpd/ssl"]
 VOLUME ["/data/conf.d"]
 VOLUME ["/var/lib/aide"]
 VOLUME ["/var/log/httpd"]
-VOLUME ["/etc/httpd/modsecurity.d/activated_rules"]
 
 EXPOSE 80
 EXPOSE 443
-
-# This doesn't work from inside the container so its been disabled.
-# Crontab AIDE check reports. Both require AIDE_EMAIL to be set to something.
-# One requires a sleep timer and the other will only run if there isn't a sleep timer.
-#RUN echo -e '# Period AIDE database checking.\n0 2 * * * root test -n "${AIDE_EMAIL}" && test -n "${AIDE_SLEEP}" && sleep ${AIDE_SLEEP} && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s "[REPORT] AIDE Integrity Check on `hostname`" ${AIDE_EMAIL}\n0 2 * * * root test -n "${AIDE_EMAIL}" && test -z "${AIDE_SLEEP}" && /usr/sbin/aide --check -c /var/lib/aide/aide.conf 2>&1 | mail -s "[REPORT] AIDE Integrity Check on `hostname`" ${AIDE_EMAIL}' >>/etc/crontab
 
 COPY run.sh /run.sh
 RUN chmod +x /run.sh

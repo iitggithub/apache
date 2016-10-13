@@ -1,6 +1,6 @@
 # Apache/PHP Based Docker Container
 
-This image is a CentOS 7 based container which contains slightly more secure versions of Apache 2.4.6 w/ openssl and mod_security and PHP w/ suhosin patch and AIDE (Advanced Intrusion Detection Environment) file and directory integrity checker.
+This image is a CentOS 7 based container which contains slightly more secure versions of Apache 2.4.6 w/ openssl and mod_security web application firewall and PHP w/ suhosin patch and AIDE (Advanced Intrusion Detection Environment) file and directory integrity checker.
 
 # Notes
 
@@ -27,7 +27,7 @@ There's two ways to get up and running, the easy way and the hard way.
 Fire up apache
 
 ```
-docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/activation_rules:/etc/httpd/modsecurity.d/activated_rules -v /data/apache/conf.d:/data/conf.d -v /data/apache/html:/var/www/html:ro -v /data/apache/ssl:/etc/httpd/ssl:ro -v /data/apache/aide:/var/lib/aide -v /data/apache/log:/var/log/httpd iitgdocker/apache:latest
+docker run -d --name apache -p 80:80 -p 443:443 -v /data/apache/conf.d:/data/conf.d -v /data/apache/html:/var/www/html:ro -v /data/apache/ssl:/etc/httpd/ssl:ro -v /data/apache/aide:/var/lib/aide -v /data/apache/log:/var/log/httpd iitgdocker/apache:latest
 ```
 
 ## The Easy Way (Docker Compose)
@@ -46,9 +46,9 @@ web-server:
     - /data/apache/ssl:/etc/httpd/ssl:ro
     - /data/apache/aide:/var/lib/aide
     - /data/apache/log:/var/log/httpd
-    - /data/apache/activation_rules:/etc/httpd/modsecurity.d/activated_rules
   #environment:
     #- APACHE_SERVERNAME=wingsof.chicken.com
+    - MOD_SECURITY_ENABLE=1
 ```
 
 By running 'docker-compose up -d' from within the same directory as your docker-compose.yml, you'll be able to bring the container up.
@@ -80,12 +80,6 @@ The default /var/www/html directory is available for your web files. Stick them 
 
 Exposes the apache log directory. This is useful for palming the logs off to a centralised syslog server or something like fail2ban to automatically ban troublesome IPs.
 
-## Apache mod_security Activation Rules
-
-Currently, this is an empty directory. But you can populate it with mod_security rules such as those found at http://www.modsecurity.org/rules.html
-
-Or you could just create your own...
-
 ## AIDE Integrity Database /var/lib/aide
 
 /var/lib/aide contains the AIDE integrity database file aide.db.tar.gz. If this file does not exist when the container starts, it will be created automatically. It is strongly recommended that this file be backed up to a secure location. This database is your baseline from which all filesystem changes are compared against so keep a copy somewhere safe.
@@ -108,5 +102,14 @@ Other than the standard mysql container environment variables which can be bette
 Variable                 | Default Value (docker-compose) | Description
 ------------------------ | ------------------------------ |------------
 APACHE_SERVERNAME        | unset                          | Sets the Apache server name.
+MOD_SECURITY_ENABLE      | 1                              | Enables the mod_security web application firewall. 0 to disable.
+
+# Apache Mod Security
+
+This docker image has apache mod_security enabled by default using the 2.2.6 ruleset. If you don't know, ModSecurity is one of the Apache server modules that provides website protection by defending from hackers and other malicious attacks. It is a set of rules with regular expressions that helps to instantly ex-filtrate the commonly known exploits. Modsecurity obstructs the processing of invalid data (code injection attacks) to reinforce and nourish server's security.
+
+So in other words, don't disable it if you can help it!
+
+Unfortunately, i don't yet know of a way to make this more configurable. If you think of a way to do this, leave a comment below.
 
 # The End
