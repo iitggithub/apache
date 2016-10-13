@@ -25,6 +25,17 @@ if [ -f /var/lib/aide/aide.conf ]
   chmod 600 /var/lib/aide/aide.conf
 fi
 
+# Allows the user to turn mod_security off
+if [ -n "${MOD_SECURITY_ENABLE}" ]
+  then
+  if [ ${MOD_SECURITY_ENABLE} -eq 0 ]
+    then
+    sed -i 's/SecRuleEngine On/SecRuleEngine DetectionOnly/g' /etc/httpd/conf.d/mod_security.conf
+    else
+    sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/g' /etc/httpd/conf.d/mod_security.conf
+  fi
+fi
+
 if [ ! -f /var/lib/aide/aide.db.gz ]
   then
   echo "Generating a new AIDE database in /var/lib/aide/aide.db.gz..."

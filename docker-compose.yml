@@ -9,6 +9,6 @@ web-server:
     - /data/apache/ssl:/etc/httpd/ssl:ro
     - /data/apache/aide:/var/lib/aide
     - /data/apache/log:/var/log/httpd
-    - /data/apache/activation_rules:/etc/httpd/modsecurity.d/activated_rules
   #environment:
-      #- APACHE_SERVERNAME=wingsof.chicken.com
+    #- APACHE_SERVERNAME=wingsof.chicken.com
+    - MOD_SECURITY_ENABLE=1
