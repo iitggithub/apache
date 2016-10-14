@@ -5,18 +5,12 @@ MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 # Make placeholder directories for the end user to mount against
 RUN mkdir -p /data/conf.d
 
-# Enables epel repo and remi repo w/ php enabled.
-COPY epel.repo /etc/yum.repos.d/epel.repo
-COPY remi.repo /etc/yum.repos.d/remi.repo
-
 RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 mod_security \
                                 mod_security_crs \
-                                aide \
-                                php \
-                                php-suhosin && \
+                                aide && \
                                 yum clean all
 
 
