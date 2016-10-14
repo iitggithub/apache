@@ -36,14 +36,14 @@ if [ -n "${MOD_SECURITY_ENABLE}" ]
   fi
 fi
 
+# Apache gets grumpy about PID files pre-existing
+rm -vf /var/run/httpd/httpd.pid
+
 if [ ! -f /var/lib/aide/aide.db.gz ]
   then
   echo "Generating a new AIDE database in /var/lib/aide/aide.db.gz..."
   /usr/sbin/aide --init && mv -vf /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
 fi
-
-# Apache gets grumpy about PID files pre-existing
-rm -vf /var/run/httpd/httpd.pid
 
 echo "httpd starting as process 1 ..."
 exec httpd -DFOREGROUND
