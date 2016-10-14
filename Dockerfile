@@ -49,11 +49,11 @@ RUN echo -e '# Include custom apache configuration files\nIncludeOptional /data/
 # Make sure /var/www/html knows who's boss.
 RUN chown -R apache:apache /var/www/html
 
-VOLUME ["/var/www/html"]
-VOLUME ["/etc/httpd/ssl"]
-VOLUME ["/data/conf.d"]
-VOLUME ["/var/lib/aide"]
-VOLUME ["/var/log/httpd"]
+#VOLUME ["/var/www/html"]
+#VOLUME ["/etc/httpd/ssl"]
+#VOLUME ["/data/conf.d"]
+#VOLUME ["/var/lib/aide"]
+#VOLUME ["/var/log/httpd"]
 
 EXPOSE 80
 EXPOSE 443
