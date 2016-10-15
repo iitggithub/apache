@@ -35,14 +35,12 @@ RUN sed -i \
            -e 's/LoadModule userdir_module/#LoadModule userdir_module/g' \
            -e 's/LoadModule status_module/#LoadModule status_module/g' \
            -e 's/LoadModule env_module/#LoadModule env_module/g' \
-           -e 's/LoadModule alias_module/#LoadModule alias_module/g' \
            -e 's/LoadModule include_module/#LoadModule include_module/g' \
            -e 's/LoadModule version_module/#LoadModule version_module/g' \
             /etc/httpd/conf.modules.d/00-base.conf
 
-# systemd isn't used so i think we can safely disable this
-# alias module is disabled so autoindex can be removed.
-RUN rm -vf /etc/httpd/conf.modules.d/00-systemd.conf /etc/httpd/conf.d/autoindex.conf
+# These files are also unnecessary
+RUN rm -vf /etc/httpd/conf.modules.d/00-systemd.conf /etc/httpd/conf.d/autoindex.conf /etc/httpd/conf.d/welcome.conf
 
 # Configure SSL
 RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
