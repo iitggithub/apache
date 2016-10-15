@@ -5,18 +5,12 @@ MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 # Make placeholder directories for the end user to mount against
 RUN mkdir -p /data/conf.d
 
-# Enables epel repo and remi repo w/ php enabled.
-COPY epel.repo /etc/yum.repos.d/epel.repo
-COPY remi.repo /etc/yum.repos.d/remi.repo
-
 RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 mod_security \
                                 mod_security_crs \
-                                aide \
-                                php \
-                                php-suhosin && \
+                                aide && \
                                 yum clean all
 
 
@@ -33,7 +27,9 @@ RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 # Secure Apache server as much as we can
 COPY secure.conf /etc/httpd/conf.d/secure.conf
 
-# Disable unused modules
+# Disable unused modules. It would be nice to disable more but
+# it may make this container less portable.
+# source: http://www.thegeekstuff.com/2011/03/apache-hardening/
 RUN sed -i \
            -e 's/LoadModule info_module/#LoadModule info_module/g' \
            -e 's/LoadModule userdir_module/#LoadModule userdir_module/g' \
@@ -44,8 +40,9 @@ RUN sed -i \
            -e 's/LoadModule version_module/#LoadModule version_module/g' \
             /etc/httpd/conf.modules.d/00-base.conf
 
-# systemd isn't used
-RUN rm -vf 00-systemd.conf
+# systemd isn't used so i think we can safely disable this
+# alias module is disabled so autoindex can be removed.
+RUN rm -vf /etc/httpd/conf.modules.d/00-systemd.conf /etc/httpd/conf.d/autoindex.conf
 
 # Configure SSL
 RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
