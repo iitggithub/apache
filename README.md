@@ -94,8 +94,8 @@ If changes are made to the container after its been started, you'll probably nee
 Replace container_name with the name/id of your running container.
 
 ```
-docker exec -it <container_name> /usr/bin/aide --init
-docker exec -it <container_name> mv /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
+docker exec -it <container_name> /usr/sbin/aide --init
+docker exec -it <container_name> mv -f /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
 ```
 
 # Environment Variables
