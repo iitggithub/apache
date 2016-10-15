@@ -35,6 +35,7 @@ RUN sed -i \
            -e 's/LoadModule userdir_module/#LoadModule userdir_module/g' \
            -e 's/LoadModule status_module/#LoadModule status_module/g' \
            -e 's/LoadModule env_module/#LoadModule env_module/g' \
+           -e 's/LoadModule alias_module/#LoadModule alias_module/g' \
            -e 's/LoadModule include_module/#LoadModule include_module/g' \
            -e 's/LoadModule version_module/#LoadModule version_module/g' \
             /etc/httpd/conf.modules.d/00-base.conf
