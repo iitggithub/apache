@@ -28,7 +28,18 @@ RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 COPY secure.conf /etc/httpd/conf.d/secure.conf
 
 # Disable unused modules
-RUN sed -i 's/LoadModule info_module/#LoadModule info_module/g' /etc/httpd/conf.modules.d/00-base.conf
+RUN sed -i \
+           -e 's/LoadModule info_module/#LoadModule info_module/g' \
+           -e 's/LoadModule userdir_module/#LoadModule userdir_module/g' \
+           -e 's/LoadModule status_module/#LoadModule status_module/g' \
+           -e 's/LoadModule env_module/#LoadModule env_module/g' \
+           -e 's/LoadModule alias_module/#LoadModule alias_module/g' \
+           -e 's/LoadModule include_module/#LoadModule include_module/g' \
+           -e 's/LoadModule version_module/#LoadModule version_module/g' \
+            /etc/httpd/conf.modules.d/00-base.conf
+
+# systemd isn't used
+RUN rm -vf 00-systemd.conf
 
 # Configure SSL
 RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
@@ -42,12 +53,6 @@ RUN echo -e '# Include custom apache configuration files\nIncludeOptional /data/
 
 # Make sure /var/www/html knows who's boss.
 RUN chown -R apache:apache /var/www/html
-
-#VOLUME ["/var/www/html"]
-#VOLUME ["/etc/httpd/ssl"]
-#VOLUME ["/data/conf.d"]
-#VOLUME ["/var/lib/aide"]
-#VOLUME ["/var/log/httpd"]
 
 EXPOSE 80
 EXPOSE 443
