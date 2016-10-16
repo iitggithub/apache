@@ -1,4 +1,4 @@
-FROM centos:7.2.1511
+FROM iitgdocker/aide:latest
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
@@ -9,13 +9,8 @@ RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 mod_security \
-                                mod_security_crs \
-                                aide && \
+                                mod_security_crs && \
                                 yum clean all
-
-
-# Install the default AIDE configuration
-COPY aide.conf /etc/aide.conf
 
 RUN sed -i -e 's/<Directory "\/var\/www\/html">/<Directory "\/var\/www\/html">\n<LimitExcept GET POST HEAD>\ndeny from all\n<\/LimitExcept>/1' \
            -e 's/Options Indexes.*/Options -Indexes -Includes +FollowSymLinks/g' /etc/httpd/conf/httpd.conf
