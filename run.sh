@@ -16,7 +16,7 @@ test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Conf
 test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
 
-# Allows the user to turn mod_security off
+# Allows the user to toggle mod_security on/off
 if [ -n "${MOD_SECURITY_ENABLE}" ]
   then
   if [ ${MOD_SECURITY_ENABLE} -eq 0 ]
