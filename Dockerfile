@@ -7,6 +7,8 @@ RUN mkdir -p /data/conf.d
 
 RUN yum -y --nogpgcheck install \
                                 httpd \
+                                php \
+                                php-suhosin \
                                 mod_ssl \
                                 mod_security \
                                 mod_security_crs && \
