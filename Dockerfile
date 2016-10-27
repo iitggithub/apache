@@ -1,4 +1,4 @@
-FROM iitgdocker/aide:latest
+FROM centos:7.2.1511
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
@@ -7,12 +7,15 @@ RUN mkdir -p /data/conf.d
 
 RUN yum -y --nogpgcheck install \
                                 httpd \
-                                php \
-                                php-suhosin \
                                 mod_ssl \
                                 mod_security \
-                                mod_security_crs && \
+                                mod_security_crs \
+                                aide && \
                                 yum clean all
+
+
+# Install the default AIDE configuration
+COPY aide.conf /etc/aide.conf
 
 RUN sed -i -e 's/<Directory "\/var\/www\/html">/<Directory "\/var\/www\/html">\n<LimitExcept GET POST HEAD>\ndeny from all\n<\/LimitExcept>/1' \
            -e 's/Options Indexes.*/Options -Indexes -Includes +FollowSymLinks/g' /etc/httpd/conf/httpd.conf
