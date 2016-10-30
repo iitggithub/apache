@@ -16,7 +16,28 @@ test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Conf
 test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
 
-# Allows the user to toggle mod_security on/off
+if [ -f /var/lib/aide/aide.conf ]
+  then
+  # override the existing AIDE configuration file if exists
+  # in the database directory.
+  echo "Found /var/lib/aide/aide.conf. Overriding the default configuration with this."
+  ln -sf /var/lib/aide/aide.conf /etc/aide.conf
+  chmod 600 /var/lib/aide/aide.conf
+fi
+
+# Move modsecurity files to the custom data
+# directory so the user can edit them as they need to.
+if [ ! -f modsecurity_crs_10_setup.conf ]
+  then
+  tar zxvf /tmp/mod_security.tar.gz -C /data/conf.d
+fi
+
+# Redirect mod_security. This is done at runtime to make sure the file can be edited by
+# other docker images
+
+sed -i 's/IncludeOptional modsecurity.d/IncludeOptional \/data\/conf.d/g' /etc/httpd/conf.d/mod_security.conf
+
+# Allows the user to turn mod_security off
 if [ -n "${MOD_SECURITY_ENABLE}" ]
   then
   if [ ${MOD_SECURITY_ENABLE} -eq 0 ]
@@ -29,15 +50,6 @@ fi
 
 # Apache gets grumpy about PID files pre-existing
 rm -vf /var/run/httpd/httpd.pid
-
-if [ -f /var/lib/aide/aide.conf ]
-  then
-  # override the existing AIDE configuration file if exists
-  # in the database directory.
-  echo "Found /var/lib/aide/aide.conf. Overriding the default configuration with this."
-  ln -sf /var/lib/aide/aide.conf /etc/aide.conf
-  chmod 600 /var/lib/aide/aide.conf
-fi
 
 if [ ! -f /var/lib/aide/aide.db.gz ]
   then

@@ -109,10 +109,10 @@ MOD_SECURITY_ENABLE      | 1                              | Enables the mod_secu
 
 # Apache Mod Security
 
-This docker image has apache mod_security enabled by default using the 2.2.6 ruleset. If you don't know, ModSecurity is one of the Apache server modules that provides website protection by defending from hackers and other malicious attacks. It is a set of rules with regular expressions that helps to instantly ex-filtrate the commonly known exploits. Modsecurity obstructs the processing of invalid data (code injection attacks) to reinforce and nourish server's security.
+This docker image has apache mod_security enabled by default using the 2.2.9 ruleset. If you don't know, ModSecurity is one of the Apache server modules that provides website protection by defending from hackers and other malicious attacks. It is a set of rules with regular expressions that helps to instantly ex-filtrate the commonly known exploits. Modsecurity obstructs the processing of invalid data (code injection attacks) to reinforce and nourish server's security.
 
 So in other words, don't disable it if you can help it!
 
-Unfortunately, i don't yet know of a way to make this more configurable. If you think of a way to do this, leave a comment below.
+The ruleset will be copied into /data/conf.d at runtime where you can modify it as necessary.
 
 # The End
