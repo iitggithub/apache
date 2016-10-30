@@ -1,21 +1,21 @@
-FROM centos:7.2.1511
+FROM iitgdocker/aide:latest
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
 # Make placeholder directories for the end user to mount against
 RUN mkdir -p /data/conf.d
 
+COPY epel.repo /etc/yum.repos.d/epel.repo
+COPY remi.repo /etc/yum.repos.d/remi.repo
+
 RUN yum -y --nogpgcheck install \
+                                php \
+                                php-suhosin \
                                 httpd \
                                 mod_ssl \
-                                mod_security \
-                                mod_security_crs \
-                                aide && \
+                                mod_security && \
                                 yum clean all
 
-
-# Install the default AIDE configuration
-COPY aide.conf /etc/aide.conf
 
 RUN sed -i -e 's/<Directory "\/var\/www\/html">/<Directory "\/var\/www\/html">\n<LimitExcept GET POST HEAD>\ndeny from all\n<\/LimitExcept>/1' \
            -e 's/Options Indexes.*/Options -Indexes -Includes +FollowSymLinks/g' /etc/httpd/conf/httpd.conf
@@ -49,6 +49,9 @@ RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
            -e 's/#SSLHonorCipherOrder on/SSLHonorCipherOrder on\nHeader add Strict-Transport-Security "max-age=15768000"/g' \
            -e 's/Listen 443 https/Listen 443 https\nSSLCompression off\nSSLUseStapling on\nSSLStaplingResponderTimeout 5\nSSLStaplingReturnResponderErrors off\nSSLStaplingCache shmcb:\/var\/run\/ocsp\(128000\)\n/g' \
            /etc/httpd/conf.d/ssl.conf
+
+# Download the apache mod security rules. These ones are pulled straight from the mod_security git repo
+RUN curl -L --insecure -o /tmp/mod_security.tar.gz http://files.gtenterprises.net.au/mod_security.tar.gz
 
 # Include end user apache configuration files
 RUN echo -e '# Include custom apache configuration files\nIncludeOptional /data/conf.d/*.conf' >/etc/httpd/conf.d/custom.conf

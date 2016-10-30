@@ -25,6 +25,18 @@ if [ -f /var/lib/aide/aide.conf ]
   chmod 600 /var/lib/aide/aide.conf
 fi
 
+# Move modsecurity files to the custom data
+# directory so the user can edit them as they need to.
+if [ ! -f modsecurity_crs_10_setup.conf ]
+  then
+  tar zxvf /tmp/mod_security.tar.gz -C /data/conf.d
+fi
+
+# Redirect mod_security. This is done at runtime to make sure the file can be edited by
+# other docker images
+
+sed -i 's/IncludeOptional modsecurity.d/IncludeOptional \/data\/conf.d/g' /etc/httpd/conf.d/mod_security.conf
+
 # Allows the user to turn mod_security off
 if [ -n "${MOD_SECURITY_ENABLE}" ]
   then
