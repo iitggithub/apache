@@ -57,6 +57,6 @@ RUN chown -R apache:apache /var/www/html
 EXPOSE 80
 EXPOSE 443
 
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
-CMD ["/run.sh"]
+COPY apache.sh /apache.sh
+RUN chmod +x /apache.sh
+CMD ["/apache.sh"]
