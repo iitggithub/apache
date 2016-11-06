@@ -9,8 +9,6 @@ COPY epel.repo /etc/yum.repos.d/epel.repo
 COPY remi.repo /etc/yum.repos.d/remi.repo
 
 RUN yum -y --nogpgcheck install \
-                                php \
-                                php-suhosin \
                                 httpd \
                                 mod_ssl \
                                 mod_security && \
@@ -62,6 +60,6 @@ RUN chown -R apache:apache /var/www/html
 EXPOSE 80
 EXPOSE 443
 
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
-CMD ["/run.sh"]
+COPY apache.sh /apache.sh
+RUN chmod +x /apache.sh
+CMD ["/apache.sh"]
