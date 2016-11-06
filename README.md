@@ -1,24 +1,17 @@
-# Apache/PHP Based Docker Container
+# Apache Based Docker Container
 
 This image is a CentOS 7 based container which contains slightly more secure versions of Apache 2.4.6 w/ openssl and mod_security web application firewall and AIDE (Advanced Intrusion Detection Environment) file and directory integrity checker.
 
-Versions 5+ include a PHP (depending which version you use) complete with the PHP suhosin patch which was was designed to protect servers and users from known and unknown flaws in PHP applications and the PHP core.
-
 # Notes
 
-The dockerfile is based on some hardening guides for php, apache and openssl.
+The dockerfile is based on some hardening guides for apache and openssl.
 
-# Supported PHP versions
+# Supported Versions
 
-PHP Version | Git branch | Tag name
-------------| ---------- |---------
-5.6         | master     | latest
-7.1         | 7.1        | 7.1
-7.0         | 7.0        | 7.0
-5.6         | 5.6        | 5.6
-5.5         | 5.5        | 5.5
-5.4         | 5.4        | 5.4
-none        | 2.4.6      | 2.4.6
+Git branch | Tag name
+---------- |---------
+master     | latest
+2.4.6      | 2.4.6
 
 
 # Getting Started
