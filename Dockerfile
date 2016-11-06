@@ -5,12 +5,7 @@ MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 # Make placeholder directories for the end user to mount against
 RUN mkdir -p /data/conf.d
 
-COPY epel.repo /etc/yum.repos.d/epel.repo
-COPY remi.repo /etc/yum.repos.d/remi.repo
-
 RUN yum -y --nogpgcheck install \
-                                php \
-                                php-suhosin \
                                 httpd \
                                 mod_ssl \
                                 mod_security && \
